@@ -1,0 +1,31 @@
+dataset: subscriptions
+version: 1
+owner: data-platform
+description: Customer subscriptions (synthetic).
+table: subscriptions
+freshness_sla_days: 30  # monthly-grained synthetic data
+date_column: start_date
+row_count_min: 100
+columns:
+  - name: subscription_id
+    type: TEXT
+    nullable: false
+    unique: true
+  - name: customer_id
+    type: TEXT
+    nullable: false
+    references: customers.customer_id
+  - name: plan
+    type: TEXT
+    nullable: false
+    allowed_values: [starter, growth, pro, enterprise]
+  - name: start_date
+    type: DATE
+    nullable: false
+  - name: end_date
+    type: DATE
+    nullable: true
+  - name: status
+    type: TEXT
+    nullable: false
+    allowed_values: [active, cancelled]

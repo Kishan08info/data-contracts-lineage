@@ -1,0 +1,36 @@
+dataset: customers
+version: 1
+owner: data-platform
+description: SaaS customers (synthetic).
+table: customers
+freshness_sla_days: 30  # monthly-grained synthetic data
+date_column: signup_date
+row_count_min: 100
+columns:
+  - name: customer_id
+    type: TEXT
+    nullable: false
+    unique: true
+  - name: name
+    type: TEXT
+    nullable: false
+  - name: email
+    type: TEXT
+    nullable: false
+    unique: true
+    pattern: "^[^@]+@[^@]+\\.[^@]+$"
+  - name: plan
+    type: TEXT
+    nullable: false
+    allowed_values: [starter, growth, pro, enterprise]
+  - name: region
+    type: TEXT
+    nullable: false
+    allowed_values: [us-west, us-east, eu-west, apac]
+  - name: signup_date
+    type: DATE
+    nullable: false
+  - name: is_active
+    type: INTEGER
+    nullable: false
+    allowed_values: [0, 1]

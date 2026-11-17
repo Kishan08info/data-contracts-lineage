@@ -1,0 +1,33 @@
+dataset: orders
+version: 2
+owner: data-platform
+description: "Customer orders (synthetic). v2: amount RENAMED to amount_usd."
+table: orders
+freshness_sla_days: 30  # monthly-grained synthetic data
+date_column: order_date
+row_count_min: 500
+columns:
+  - name: order_id
+    type: TEXT
+    nullable: false
+    unique: true
+  - name: customer_id
+    type: TEXT
+    nullable: false
+    references: customers.customer_id
+  - name: order_date
+    type: DATE
+    nullable: false
+  - name: amount_usd
+    type: REAL
+    nullable: false
+    min_value: 0.0
+    renamed_from: amount
+  - name: currency
+    type: TEXT
+    nullable: false
+    allowed_values: [USD]
+  - name: status
+    type: TEXT
+    nullable: false
+    allowed_values: [paid, refunded, failed]

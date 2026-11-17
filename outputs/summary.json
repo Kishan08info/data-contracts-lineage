@@ -1,0 +1,145 @@
+{
+  "rows_generated": {
+    "customers": 300,
+    "subscriptions": 300,
+    "orders": 1967,
+    "payments": 1817
+  },
+  "clean_validation": {
+    "checks_run": 77,
+    "violations": 0,
+    "passed": true
+  },
+  "defects_injected": {
+    "min_value_orders.amount": 5,
+    "allowed_values_orders.status": 1,
+    "not_null_customers.email": 4,
+    "unique_customers.email": 2,
+    "referential_payments.order_id": 3
+  },
+  "dirty_validation": {
+    "checks_run": 77,
+    "violations": 5,
+    "passed": false,
+    "violation_list": [
+      {
+        "dataset": "customers",
+        "table": "customers",
+        "check": "not_null",
+        "column": "email",
+        "detail": "4 NULL values",
+        "count": 4,
+        "sample": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "dataset": "customers",
+        "table": "customers",
+        "check": "unique",
+        "column": "email",
+        "detail": "1 duplicate values",
+        "count": 1,
+        "sample": [
+          "dup@example.com"
+        ]
+      },
+      {
+        "dataset": "orders",
+        "table": "orders",
+        "check": "min_value",
+        "column": "amount",
+        "detail": "5 values below 0.0",
+        "count": 5,
+        "sample": [
+          -49.99,
+          -49.99,
+          -49.99
+        ]
+      },
+      {
+        "dataset": "orders",
+        "table": "orders",
+        "check": "allowed_values",
+        "column": "status",
+        "detail": "1 values outside ['paid', 'refunded', 'failed']",
+        "count": 1,
+        "sample": [
+          "bogus"
+        ]
+      },
+      {
+        "dataset": "payments",
+        "table": "payments",
+        "check": "referential",
+        "column": "order_id",
+        "detail": "3 values with no match in orders.order_id",
+        "count": 3,
+        "sample": [
+          "O99999",
+          "O99999",
+          "O99999"
+        ]
+      }
+    ]
+  },
+  "lineage": {
+    "models": 6,
+    "table_edges": 8,
+    "column_edges": 28
+  },
+  "impact": {
+    "customers.plan": [
+      "stg_customers.plan",
+      "mart_churn.plan",
+      "mart_monthly_revenue.plan"
+    ],
+    "orders.amount": [
+      "stg_orders.amount",
+      "mart_customer_ltv.total_paid",
+      "mart_monthly_revenue.revenue"
+    ]
+  },
+  "breaking_changes": {
+    "total": 3,
+    "breaking": 2,
+    "changes": [
+      {
+        "dataset": "customers",
+        "change": "column_dropped",
+        "detail": "customers.plan dropped in v2",
+        "severity": "breaking",
+        "affected_models": [
+          "mart_churn",
+          "mart_monthly_revenue",
+          "stg_customers"
+        ]
+      },
+      {
+        "dataset": "customers",
+        "change": "column_added",
+        "detail": "customers.segment added (nullable=True)",
+        "severity": "non-breaking",
+        "affected_models": []
+      },
+      {
+        "dataset": "orders",
+        "change": "column_renamed",
+        "detail": "orders.amount renamed to amount_usd",
+        "severity": "breaking",
+        "affected_models": [
+          "mart_customer_ltv",
+          "mart_monthly_revenue",
+          "stg_orders"
+        ]
+      }
+    ]
+  },
+  "mart_rows": {
+    "mart_monthly_revenue": 84,
+    "mart_customer_ltv": 300,
+    "mart_churn": 40
+  }
+}

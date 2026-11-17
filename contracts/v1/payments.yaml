@@ -1,0 +1,32 @@
+dataset: payments
+version: 1
+owner: data-platform
+description: Payments against orders (synthetic).
+table: payments
+freshness_sla_days: 30  # monthly-grained synthetic data
+date_column: payment_date
+row_count_min: 500
+columns:
+  - name: payment_id
+    type: TEXT
+    nullable: false
+    unique: true
+  - name: order_id
+    type: TEXT
+    nullable: false
+    references: orders.order_id
+  - name: payment_date
+    type: DATE
+    nullable: false
+  - name: amount
+    type: REAL
+    nullable: false
+    min_value: 0.0
+  - name: method
+    type: TEXT
+    nullable: false
+    allowed_values: [card, bank, paypal]
+  - name: status
+    type: TEXT
+    nullable: false
+    allowed_values: [paid, refunded, failed]
